@@ -1,10 +1,3 @@
-//
-//  HorologeWidget.swift
-//  HorologeWidget
-//
-//  Created by John Britton on 12/25/20.
-//
-
 import WidgetKit
 import SwiftUI
 
@@ -40,45 +33,32 @@ struct SimpleEntry: TimelineEntry {
 struct HorologeWidgetEntryView : View {
     var entry: Provider.Entry
 
-    func timeString(date: Date, timeZone: TimeZone?) -> String {
+    func timeString(date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateStyle = .none
         formatter.timeStyle = .short
-        formatter.timeZone = timeZone
+        formatter.timeZone = .autoupdatingCurrent
         let time = formatter.string(from: date)
         return time
     }
+    
+    func dateString(date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE, yyyy-MM-dd"
+        return formatter.string(from: date)
+    }
 
     var body: some View {
-        VStack(spacing: 25) {
-            VStack {
-                Text("Local")
-                    .font(.headline)
-                Text("\(timeString(date: entry.date, timeZone: .autoupdatingCurrent))")
-                    .font(.largeTitle)
-            }
-
-            HStack(spacing: 25) {
-                VStack {
-                    Text("San Francisco")
-                        .font(.headline)
-                    Text("\(timeString(date: entry.date, timeZone: TimeZone(identifier: "US/Pacific")))")
-                        .font(.title)
-                }
-                VStack {
-                    Text("London")
-                        .font(.headline)
-                    Text("\(timeString(date: entry.date, timeZone: TimeZone(identifier: "Europe/London")))")
-                        .font(.title)
-                }
-                VStack {
-                    Text("Amsterdam")
-                        .font(.headline)
-                    Text("\(timeString(date: entry.date, timeZone: TimeZone(identifier: "Europe/Amsterdam")))")
-                        .font(.title)
-                }
-            }
+        VStack(spacing: 15) {
+            Text(dateString(date: entry.date))
+                .font(.headline)
+            Text(timeString(date: entry.date))
+                .font(.system(size: 60, weight: .bold))
+                .minimumScaleFactor(0.5)
+                .lineLimit(1)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding()
     }
 }
 
